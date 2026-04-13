@@ -1,0 +1,59 @@
+#!/bin/bash Gnome Setup Program
+#Copyright (c) 2026 By Marvin.W
+
+set -eu
+
+apt install -y --no-install-recommends gnome-core gnome-shell desktop-base \
+network-manager-gnome gnome-audio gnome-clocks gnome-shell-extension-manager gnome-remote-desktop pkexec gnome-shell-extension-user-theme gnome-shell-extension-system-monitor gnome-shell-extension-drive-menu gnome-shell-extension-places-menu gnome-shell-extension-prefs gnome-shell-extension-dashtodock gnome-keyring gnome-shell-extension-appindicator yaru-theme-gnome-shell gnome-shell-extension-desktop-icons-ng
+
+# Purge Obsoleted Packages, Temporary Files:
+apt remove -y gnome-contacts cheese gnome-snapshot simple-scan gnome-maps totem totem-common totem-plugins gnome-connections
+apt autoremove -y ; apt autoclean -y ; apt autopurge -y
+
+# Repair Network Missing When Updating to Gnome Desktop
+sed -i 'N;$!P;$!D;$d' /etc/network/interfaces
+
+# Configurate Gnome Remote Desktop Environment:
+systemctl daemon-reload
+systemctl stop gnome-remote-desktop.service
+sudo -u gnome-remote-desktop mkdir -p \
+  /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates
+sudo -u gnome-remote-desktop openssl req -newkey rsa:2048 -nodes \
+  -keyout /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates/rdp-tls.key \
+  -x509 -days 3650 \
+  -out /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates/rdp-tls.crt \
+  -subj "/C=CN/ST=HK/L=HK/O=Home/CN=debian"
+chown -R gnome-remote-desktop:gnome-remote-desktop \
+  /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates/
+chmod 600 /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates/rdp-tls.key
+chmod 644 /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates/rdp-tls.crt
+grdctl --system rdp disable
+grdctl --system rdp set-tls-key \
+  /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates/rdp-tls.key
+grdctl --system rdp set-tls-cert \
+  /var/lib/gnome-remote-desktop/.local/share/gnome-remote-desktop/certificates/rdp-tls.crt
+grdctl --system rdp set-credentials marvin 'Marvin'
+grdctl --system rdp enable
+grdctl --system rdp disable-view-only
+systemctl enable --now gnome-remote-desktop.service
+grdctl --system status
+
+# Configurate Gnome Desktop Default Login User:
+sed -i '/AutomaticLoginEnable/i\AutomaticLogin=marvin' /etc/gdm3/daemon.conf
+
+# Gnome Desktop RDP Permission Elevation
+cat <<'EOF' | sudo tee /etc/polkit-1/rules.d/10-shutdown-reboot.rules >/dev/null
+polkit.addRule(function(action, subject) {
+    if (
+        (action.id == "org.freedesktop.login1.reboot" ||
+         action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
+         action.id == "org.freedesktop.login1.reboot-ignore-inhibit" ||
+         action.id == "org.freedesktop.login1.power-off" ||
+         action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
+         action.id == "org.freedesktop.login1.power-off-ignore-inhibit") &&
+        (subject.user == "ss" || subject.isInGroup("sudo"))
+    ) {
+        return polkit.Result.YES;
+    }
+});
+EOF
