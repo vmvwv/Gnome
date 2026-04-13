@@ -49,7 +49,6 @@ gsettings set org.gnome.gnome-system-monitor network-total-in-bits true
 gsettings set org.gnome.gnome-system-monitor.disksview col-free-visible true
 gsettings set org.gnome.gnome-system-monitor.disksview col-free-width 80
 gsettings set org.gnome.gnome-system-monitor current-tab 'resources'
-gsettings set org.gtk.gtk4.Settings.FileChooser show-hidden true
 
 gsettings set org.gnome.desktop.background picture-uri-dark ''
 gsettings set org.gnome.desktop.background primary-color '#000000'
@@ -58,9 +57,12 @@ gsettings set org.gnome.desktop.background color-shading-type 'solid'
 
 gsettings set org.gnome.nautilus.preferences show-hidden-files true
 gsettings set org.gnome.nautilus.preferences show-delete-permanently true
-gsettings set org.gnome.nautilus.preferences sort-directories-first true
 gsettings set org.gnome.nautilus.window-state maximized true
 gsettings set org.gnome.nautilus.icon-view default-zoom-level 'medium'
+gsettings set org.gtk.Settings.FileChooser sort-directories-first true
+gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
+gsettings set org.gtk.Settings.FileChooser show-hidden true
+gsettings set org.gtk.gtk4.Settings.FileChooser show-hidden true
 
 gsettings set org.gnome.TextEditor show-grid true
 gsettings set org.gnome.TextEditor highlight-current-line true
