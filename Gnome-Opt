@@ -29,6 +29,7 @@ gnome-extensions enable dash-to-dock@micxgx.gmail.com
 gnome-extensions enable places-menu@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable ding@rastersoft.com
 gnome-extensions enable ubuntu-appindicators@ubuntu.com
+gnome-extensions enable kimpanel@kde.org
 gnome-extensions enable drive-menu@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com
 gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
@@ -88,7 +89,7 @@ USER_NAME=($(ls -d /home/*/|cut -d/ -f3))
 
 sudo apt update
 sudo apt install -y --no-install-recommends vim expect firewalld \
-gnome-keyring-pkcs11 gnome-shell-extension-kimpanel im-config fcitx5 fcitx5-chinese-addons fcitx5-config-qt fcitx5-frontend-gtk4 fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 fonts-wqy-microhei fonts-wqy-zenhei libxss1 xdg-utils
+gnome-keyring-pkcs11 im-config fcitx5 fcitx5-chinese-addons fcitx5-config-qt fcitx5-frontend-gtk4 fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 fonts-wqy-microhei fonts-wqy-zenhei libxss1 xdg-utils
 
 # Purge Obsoleted Kernels and Packages:
 sudo apt autopurge -y
@@ -104,7 +105,7 @@ echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
 sudo firewall-cmd --permanent --add-masquerade
 
 # Add Rule of RDP Service to Firewall:
-firewall-cmd --add-port=3389/tcp --permanent
+sudo firewall-cmd --add-port=3389/tcp --permanent
 
 # Configurate fcitx5 environment:
 pkill -x fcitx5 || true
