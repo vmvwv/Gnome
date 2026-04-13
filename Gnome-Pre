@@ -54,7 +54,7 @@ polkit.addRule(function(action, subject) {
          action.id == "org.freedesktop.login1.power-off" ||
          action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
          action.id == "org.freedesktop.login1.power-off-ignore-inhibit") &&
-        (subject.user == "ss" || subject.isInGroup("sudo"))
+        (subject.user == "marvin" || subject.isInGroup("sudo"))
     ) {
         return polkit.Result.YES;
     }
