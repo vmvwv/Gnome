@@ -40,6 +40,7 @@ grdctl --system status
 
 # Configurate Gnome Desktop Default Login User:
 sed -i '/AutomaticLoginEnable/i\AutomaticLogin=marvin' /etc/gdm3/daemon.conf
+sed -i 's|AutomaticLoginEnable|#  AutomaticLoginEnable|g' /etc/gdm3/daemon.conf
 
 # Gnome Desktop RDP Permission Elevation
 cat <<'EOF' | sudo tee /etc/polkit-1/rules.d/10-shutdown-reboot.rules >/dev/null
