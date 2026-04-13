@@ -1,0 +1,130 @@
+#!/bin/bash
+# Debian Optimization Program
+# Copyright (c) 2026 By Marvin.W
+
+set -eu
+
+# Debian Gnome Configuring:
+gsettings set org.gnome.Settings last-panel 'network'
+gsettings set org.gnome.system.location enabled false
+gsettings set org.gnome.desktop.session idle-delay 0
+gsettings set org.gnome.desktop.screensaver lock-delay 0
+gsettings set org.gnome.desktop.screensaver lock-enabled false
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+gsettings set org.gnome.desktop.notifications show-in-lock-screen false
+gsettings set org.gnome.desktop.privacy remove-old-trash-files false
+gsettings set org.gnome.desktop.privacy remove-old-temp-files true
+gsettings set org.gnome.desktop.privacy old-files-age 1
+gsettings set org.gnome.desktop.privacy report-technical-problems false
+gsettings set org.gnome.desktop.media-handling autorun-never true
+gsettings set org.gnome.desktop.interface enable-animations false
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface enable-animations false
+gsettings set org.gnome.desktop.datetime automatic-timezone true
+gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
+
+gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.SystemMonitor.desktop', 'org.gnome.Extensions.desktop', 'org.gnome.Settings.desktop']"
+
+gnome-extensions enable dash-to-dock@micxgx.gmail.com
+gnome-extensions enable places-menu@gnome-shell-extensions.gcampax.github.com
+gnome-extensions enable ding@rastersoft.com
+gnome-extensions enable ubuntu-appindicators@ubuntu.com
+gnome-extensions enable drive-menu@gnome-shell-extensions.gcampax.github.com
+gnome-extensions enable system-monitor@gnome-shell-extensions.gcampax.github.com
+gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
+
+gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 45
+gsettings set org.gnome.shell.extensions.dash-to-dock height-fraction 0.70
+gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true
+gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed true
+gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'LEFT'
+gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'focus-minimize-or-previews'
+gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts-network false
+gsettings set org.gnome.shell.extensions.dash-to-dock hide-tooltip true
+gsettings set org.gnome.shell.extensions.user-theme name 'Yaru-dark'
+
+gsettings set org.gnome.gnome-system-monitor show-dependencies true
+gsettings set org.gnome.gnome-system-monitor network-total-in-bits true
+gsettings set org.gnome.gnome-system-monitor.disksview col-free-visible true
+gsettings set org.gnome.gnome-system-monitor.disksview col-free-width 80
+gsettings set org.gnome.gnome-system-monitor current-tab 'resources'
+
+gsettings set org.gnome.desktop.background picture-uri-dark ''
+gsettings set org.gnome.desktop.background primary-color '#000000'
+gsettings set org.gnome.desktop.background secondary-color '#000000'
+gsettings set org.gnome.desktop.background color-shading-type 'solid'
+
+gsettings set org.gnome.nautilus.preferences show-hidden-files true
+gsettings set org.gnome.nautilus.preferences show-delete-permanently true
+gsettings set org.gnome.nautilus.window-state maximized true
+gsettings set org.gnome.nautilus.icon-view default-zoom-level 'medium'
+
+gsettings set org.gnome.TextEditor show-grid true
+gsettings set org.gnome.TextEditor highlight-current-line true
+gsettings set org.gnome.TextEditor show-map true
+gsettings set org.gnome.TextEditor show-line-numbers true
+gsettings set org.gnome.TextEditor use-system-font false
+gsettings set org.gnome.TextEditor style-scheme 'oblivion'
+gsettings set org.gnome.TextEditor custom-font 'Monospace 12'
+gsettings set org.gnome.TextEditor wrap-text true
+gsettings set org.gnome.TextEditor restore-session true
+gsettings set org.gnome.TextEditor right-margin-position 100
+gsettings set org.gnome.TextEditor discover-settings true
+
+profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
+profile=${profile:1:-1}
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" default-size-columns 180
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" default-size-rows 60
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" use-system-font false
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" font 'Monospace 13'
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" cursor-blink-mode 'on'
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" use-theme-colors false
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" background-color 'rgb(0,0,0)'
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" foreground-color 'rgb(208,207,204)'
+gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" scrollback-unlimited true
+
+# Fetch User Name
+USER_NAME=($(ls -d /home/*/|cut -d/ -f3))
+
+sudo apt update
+sudo apt install -y --no-install-recommends vim expect firewalld \
+gnome-keyring-pkcs11 gnome-shell-extension-kimpanel im-config fcitx5 fcitx5-chinese-addons fcitx5-config-qt fcitx5-frontend-gtk4 fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 fonts-wqy-microhei fonts-wqy-zenhei libxss1 xdg-utils
+
+# Purge Obsoleted Kernels and Packages:
+sudo apt autopurge -y
+sudo apt autoremove -y
+
+# Restore Tailored Bash Environment:
+rm -f ~/.bashrc
+cp -f /etc/skel/.bashrc ~/
+
+# Enable IP Forwarding and Allow Permanent Firewall Masquerading:
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
+sudo firewall-cmd --permanent --add-masquerade
+
+# Add Rule of RDP Service to Firewall:
+firewall-cmd --add-port=3389/tcp --permanent
+
+# Configurate fcitx5 environment:
+pkill -x fcitx5 || true
+mkdir -p "$HOME/.config/fcitx5"
+cat > "$HOME/.config/fcitx5/profile" <<'EOF'
+[Groups/0]
+Name=Default
+Default Layout=us
+DefaultIM=pinyin
+
+[Groups/0/Items/0]
+Name=keyboard-us
+Layout=
+
+[Groups/0/Items/1]
+Name=pinyin
+Layout=
+
+[GroupOrder]
+0=Default
+EOF
+
+history -c
