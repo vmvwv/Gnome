@@ -57,6 +57,7 @@ gsettings set org.gnome.desktop.background color-shading-type 'solid'
 
 gsettings set org.gnome.nautilus.preferences show-hidden-files true
 gsettings set org.gnome.nautilus.preferences show-delete-permanently true
+gsettings set org.gnome.nautilus.preferences sort-directories-first true
 gsettings set org.gnome.nautilus.window-state maximized true
 gsettings set org.gnome.nautilus.icon-view default-zoom-level 'medium'
 
