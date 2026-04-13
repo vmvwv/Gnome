@@ -6,7 +6,7 @@ set -eu
 apt update
 apt full-upgrade -y
 apt install -y --no-install-recommends gnome-core gnome-shell desktop-base \
-network-manager-gnome gnome-audio gnome-clocks gnome-shell-extension-manager gnome-remote-desktop pkexec gnome-shell-extension-user-theme gnome-shell-extension-system-monitor gnome-shell-extension-drive-menu gnome-shell-extension-places-menu gnome-shell-extension-prefs gnome-shell-extension-dashtodock gnome-keyring gnome-shell-extension-appindicator yaru-theme-gnome-shell gnome-shell-extension-desktop-icons-ng
+network-manager-gnome gnome-audio gnome-clocks gnome-shell-extension-manager gnome-remote-desktop pkexec gnome-shell-extension-user-theme gnome-shell-extension-system-monitor gnome-shell-extension-drive-menu gnome-shell-extension-places-menu gnome-shell-extension-prefs gnome-shell-extension-dashtodock gnome-keyring gnome-shell-extension-appindicator yaru-theme-gnome-shell gnome-shell-extension-kimpanel gnome-shell-extension-desktop-icons-ng
 
 # Purge Obsoleted Packages, Temporary Files:
 apt remove -y gnome-contacts cheese gnome-snapshot simple-scan gnome-maps totem totem-common totem-plugins gnome-connections
